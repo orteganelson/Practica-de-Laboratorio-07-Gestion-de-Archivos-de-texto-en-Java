@@ -11,11 +11,19 @@ import javax.swing.*;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 /**
+ * Esta clase es específicamente la interfaz gráfica de la aplicación, es decir 
+ * con la que el usuario interactuará de manera directa. En esta clase el usuario podrá
+ * escoger la ruta para la ejecución del programa. Sin embargo, el usuario deberá tener en
+ * en cuenta las restricciones planteadas.
  *
- * @author Usuario
+ * @author Nelson Ortega
+ * @version 8.2
+ * @author Anahi Cabrera
+ * @version 8.2
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
     String name;
+    //Llamar a la clase controladorTexto para poder acceder a los métodos.
     private ControladorTexto controladorTexto;
     /**
      * Creates new form VentanaPrincipal
