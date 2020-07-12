@@ -28,9 +28,71 @@ public class ControladorTexto {
      */
     private String ruta;
     private File fichero;
+    private List<Character> abecedario;
+    private Map<Character, Character> diccionario;
     
     public ControladorTexto() {
+        abecedario = new ArrayList<>();
+        diccionario = new HashMap<>();
+        diccionario = crearDiccionario();
+    }
+    
+    public Map<Character, Character> crearDiccionario() {
+        //Declaracion de nuevas varibles
+        String abecedario = "abcdefghijklmnñopqrstuvwxyz";
+        String abecedario2 = "nopqrstuvwxyza☼bcdefghijklm";
+        String numeros = "0123456789";
+        String numeros2="♫►◄↕¶§▬↨↑↓♪";        
+        String espacio = " ";
+
+
+        for (int i = 0; i < abecedario.length(); i++) {
+            diccionario.put(abecedario.charAt(i), abecedario2.charAt(i));
+        }
         
+        for (int i = 0; i < numeros.length()-1; i++) {
+            diccionario.put(numeros.charAt(i), numeros2.charAt(i));
+        }
+        diccionario.put(espacio.charAt(0), numeros2.charAt(10));
+        return diccionario;
+    }
+    
+    public void encriptar(String rutaAbsoluta, String texto) {
+        String aux = "";
+        for (int i = 0; i < texto.length(); i++) {
+            char letra = texto.charAt(i);
+            String le1 = String.valueOf(letra);
+            for (Map.Entry<Character, Character> letra2 : diccionario.entrySet()) {
+                String le2 = String.valueOf(letra2.getKey());
+                if (le1.equalsIgnoreCase(le2)) {
+                    
+                    if (Character.isUpperCase(letra)) {
+                        aux = aux.concat(String.valueOf(letra2.getValue()).toUpperCase());
+                        System.out.println(aux);
+                    } else {
+                        aux = aux.concat(String.valueOf(letra2.getValue()));
+                        System.out.println(aux);
+                    }
+                }
+            }
+        }
+        try {
+
+            FileWriter archivoEscritura = new FileWriter(rutaAbsoluta, false);           
+
+            BufferedWriter esc= new BufferedWriter(archivoEscritura);
+
+            esc.append(aux);
+            esc.close();
+            archivoEscritura.close();
+
+        } catch (FileNotFoundException e1) {
+            System.out.println("Ruta no encontrada");
+        } catch (IOException e2) {
+            System.out.println("Error de escritura");
+        } catch (Exception e3) {
+            System.out.println("Error");
+        }
     }
     
     public boolean comprobarRuta(String ruta) {

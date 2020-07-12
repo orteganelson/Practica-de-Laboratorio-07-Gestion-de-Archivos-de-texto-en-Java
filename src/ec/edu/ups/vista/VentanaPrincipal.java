@@ -5,17 +5,25 @@
  */
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ControladorTexto;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  *
  * @author Usuario
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-
+    String name;
+    private ControladorTexto controladorTexto;
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
+        name = null;
+        controladorTexto = new ControladorTexto();
     }
 
     /**
@@ -39,12 +47,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel1.setText("Ruta:");
 
         btnBuscar.setText("Buscar Ruta");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         txtAreaTexto.setColumns(20);
         txtAreaTexto.setRows(5);
         jScrollPane1.setViewportView(txtAreaTexto);
 
         btnCrear.setText("Crear Archivo");
+        btnCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,6 +101,56 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        JFileChooser buscador = new JFileChooser();
+        
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.TXT", "txt" );
+        
+        buscador.setFileFilter(filtro);
+        
+        buscador.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        
+        int seleccionar = buscador.showOpenDialog(this);
+
+        if (seleccionar == JFileChooser.APPROVE_OPTION) {
+
+            File fichero = buscador.getSelectedFile();
+            txtRuta.setText(fichero.getAbsolutePath());                      
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
+        String nombre = txtRuta.getText();
+
+        if (!nombre.contains(".")) {
+            do {
+                name = JOptionPane.showInputDialog(this, "Ingrese el nombre del archivo: ");
+
+            } while (name == null || controladorTexto.comprobar(txtRuta.getText(), name));
+
+            if (controladorTexto.comprobarRuta(txtRuta.getText())) {
+                String path = controladorTexto.crearFichero(txtRuta.getText(), name);
+                controladorTexto.encriptar(path, txtAreaTexto.getText());
+                JOptionPane.showMessageDialog(this, "Fichero creado y encriptado con exito");
+                txtAreaTexto.setText("");
+                txtRuta.setText("");
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Ruta incorrecta");
+            }
+        } else {
+            if (controladorTexto.comprobarRuta(txtRuta.getText())) {
+                String path = txtRuta.getText();
+                controladorTexto.encriptar(path, txtAreaTexto.getText());
+                JOptionPane.showMessageDialog(this, "Fichero creado y encriptado con exito");
+                txtAreaTexto.setText("");
+                txtRuta.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Ruta incorrecta ");
+            }
+        }
+    }//GEN-LAST:event_btnCrearActionPerformed
 
     /**
      * @param args the command line arguments
