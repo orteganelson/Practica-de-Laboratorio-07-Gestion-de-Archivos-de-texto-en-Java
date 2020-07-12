@@ -35,12 +35,15 @@ public class ControladorTexto {
     
     public boolean comprobar(String ruta, String nombre) {
         nombre = nombre.concat(".txt");
+        
         fichero = new File(ruta + File.separator + nombre);
 
         if (fichero.exists()) {
             return true;
+            
         } else {
             return false;
+            
         }
     }
     
